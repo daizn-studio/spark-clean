@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<title>Reviews — Spark Clean</title>
+<meta name="description" content="Real reviews from Spark Clean customers in Melbourne — end of lease and office cleaning.">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<script>document.documentElement.classList.add('js-ready');</script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <a href="index.html" class="logo">
+      <svg class="logo-mark" viewBox="0 0 44 44" fill="none" aria-hidden="true">
+        <defs>
+          <linearGradient id="scTile" x1="0" y1="0" x2="44" y2="44" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#4C7365"/><stop offset="1" stop-color="#12171A"/>
+          </linearGradient>
+          <linearGradient id="scSpark" x1="12" y1="8" x2="34" y2="34" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#FFFFFF"/><stop offset="1" stop-color="#AEC6BB"/>
+          </linearGradient>
+        </defs>
+        <rect x="1.5" y="1.5" width="41" height="41" rx="13" fill="url(#scTile)"/>
+        <rect x="1.5" y="1.5" width="41" height="41" rx="13" stroke="#AEC6BB" stroke-opacity=".28" stroke-width="1"/>
+        <path d="M22 9.5c1.6 6.2 3.3 7.9 9.5 9.5-6.2 1.6-7.9 3.3-9.5 9.5-1.6-6.2-3.3-7.9-9.5-9.5 6.2-1.6 7.9-3.3 9.5-9.5Z" fill="url(#scSpark)"/>
+        <path d="M31.5 26.5c.8 3 1.6 3.8 4.6 4.6-3 .8-3.8 1.6-4.6 4.6-.8-3-1.6-3.8-4.6-4.6 3-.8 3.8-1.6 4.6-4.6Z" fill="#AEC6BB" fill-opacity=".92"/>
+        <circle cx="13.6" cy="31.4" r="1.9" fill="#AEC6BB" fill-opacity=".75"/>
+      </svg>
+      <span>Spark Clean</span>
+    </a>
+  </div>
+</header>
+
+<main class="legal-wrap">
+  <a href="index.html" class="back-link">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+    Back to homepage
+  </a>
+
+  <span class="eyebrow">Reviews</span>
+  <h1 style="margin-top:10px">What tenants say</h1>
+  <p class="updated">Real reviews from real completed cleans — collected through the feedback link we text every customer.</p>
+
+  <div class="reviews-empty" id="reviewsEmpty">
+    <div class="stars-empty">★★★★★</div>
+    <p>Real reviews appear here once customers leave them. We collect them after every completed clean, through the feedback link we text you.</p>
+  </div>
+  <div id="allReviewsMount" hidden></div>
+</main>
+
+<script src="js/config.js"></script>
+<script src="js/reviews.js"></script>
+</body>
+</html>

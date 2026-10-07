@@ -1,0 +1,159 @@
+/* =========================================================
+   SCROLL HERO
+   A looping background video (real footage, muted/silent) with
+   a dark navy overlay for text contrast, a faint light sweep,
+   and a vignette. The overlay/sweep are scrubbed by scroll
+   position (--p, 0→1) instead of a clock — js/hero-scroll.js
+   sets --p every frame while the hero is in the document's
+   scroll range, so scrolling back up runs the scene back
+   exactly as far as it ran forward.
+
+   PLACEHOLDER FOOTAGE: js/hero-scroll.js points the <video> at
+   a free, commercially-licensed Pexels clip — a real gloved hand
+   wiping soap suds off a bathroom mirror with a sponge, a home
+   surface (id 4238760, pexels.com/video/person-cleaning-a-mirror-
+   4238760/). Swap that URL for our own filmed footage before
+   launch; the hotlinked CDN file is a stand-in, not something to
+   ship long-term. Video is
+   skipped entirely on narrow screens, data-saver connections
+   and prefers-reduced-motion — the gradient fallback below
+   covers all of those cases on its own.
+========================================================= */
+
+.sh{
+  --p:0;
+  position:relative;
+  overflow:hidden;
+  min-height:min(86vh,760px);
+  display:flex;
+  align-items:center;
+  /* Fallback ground: shows instantly, stays visible behind the video's
+     transparent gaps (if any) and is the whole background whenever the
+     video is skipped or fails. */
+  background:linear-gradient(165deg, var(--teal-800) 0%, var(--teal-900) 62%, #0d1215 100%);
+}
+
+.sh__stage{ position:absolute; inset:0; z-index:0; overflow:hidden; }
+
+.sh__video-wrap{ position:absolute; inset:0; }
+.sh__video{
+  position:absolute; inset:0; width:100%; height:100%;
+  object-fit:cover; object-position:center;
+  /* The footage's subject (hand/mirror) sits toward the left of frame,
+     which lined up exactly with the text panel + booking card and hid
+     it. Mirroring horizontally puts it on the right side of the screen,
+     in the open space, instead. */
+  transform:scaleX(-1);
+}
+/* A static frame swapped in for prefers-reduced-motion / failure cases —
+   js/hero-scroll.js toggles this instead of ever starting playback. */
+.sh__video[hidden]{ display:none; }
+
+/* Darkens the footage so the cream headline stays readable — heavier on
+   the left, where the text panel sits, lighter toward the right. */
+.sh__video-overlay{
+  position:absolute; inset:0; pointer-events:none;
+  background:
+    linear-gradient(100deg, rgba(13,18,21,.82) 0%, rgba(13,18,21,.55) 55%, rgba(13,18,21,.68) 100%),
+    linear-gradient(180deg, rgba(13,18,21,.25) 0%, rgba(13,18,21,.45) 100%);
+}
+
+/* ---- light sweep: a faint diagonal sheen tied to scroll ---- */
+.sh__streak{
+  position:absolute; top:-20%; height:150%; width:30%;
+  left:calc(-40% + var(--p) * 150%);
+  background:linear-gradient(100deg,
+    transparent, rgba(255,255,255,.02) 35%, rgba(255,255,255,.12) 48%,
+    rgba(255,255,255,.02) 62%, transparent);
+  transform:rotate(-9deg);
+  opacity:calc(0.5 + var(--p) * 0.4);
+  pointer-events:none;
+  will-change:left;
+}
+
+.sh__grade{
+  position:absolute; inset:0; pointer-events:none;
+  box-shadow:inset 0 0 220px -60px rgba(0,0,0,.6);
+}
+
+/* ---- panel ---- */
+.sh__inner{ position:relative; z-index:2; width:100%; }
+.sh__panel{ max-width:620px; }
+
+.sh__textwrap{ margin-bottom:clamp(24px,3.4vw,36px); }
+
+.sh__eyebrow{
+  display:flex; align-items:center; gap:12px;
+  font-size:.8rem; font-weight:600; letter-spacing:.22em; text-transform:uppercase;
+  color:var(--accent-300); margin-bottom:16px;
+}
+.sh__diamond{
+  width:13px; aspect-ratio:1; border-radius:4px; flex:none;
+  background:var(--accent-400); transform:rotate(45deg);
+}
+.sh__title{
+  font-family:var(--font-display); font-weight:800;
+  font-size:clamp(2.2rem,4.6vw,3.7rem);
+  line-height:1.05; letter-spacing:-.02em; color:var(--bg-cream); margin:0 0 16px;
+  text-shadow:0 2px 24px rgba(0,0,0,.35);
+}
+.sh__title .a{ color:var(--accent-300); }
+.sh__sub{
+  font-size:clamp(.95rem,1.15vw,1.1rem); line-height:1.55;
+  color:rgba(250,247,240,.74); max-width:42ch; margin:0;
+  text-shadow:0 1px 16px rgba(0,0,0,.3);
+}
+
+.sh__card{
+  border-radius:var(--r-xl); padding:clamp(16px,2vw,22px);
+  background:rgba(250,247,240,.96);
+  border:1px solid rgba(250,247,240,.14);
+  box-shadow:var(--sh-lg);
+  backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+  max-width:400px;
+}
+.sh__row{
+  display:flex; align-items:center; justify-content:space-between; gap:10px;
+  background:#fff; border:1px solid var(--ink-100);
+  border-radius:var(--r-md); padding:12px 15px; margin-bottom:9px;
+}
+.sh__row label{ font-size:.86rem; color:var(--ink-500); font-weight:500; flex:none; }
+.sh__row select{
+  border:0; background:transparent; text-align:right; cursor:pointer;
+  font-family:inherit; font-size:.9rem; font-weight:600; color:var(--teal-700); max-width:60%;
+}
+.sh__row select:focus{ outline:2px solid var(--mint-500); outline-offset:2px; border-radius:4px; }
+.sh__cta{
+  display:block; width:100%; text-align:center; text-decoration:none;
+  font-family:inherit; font-size:1rem; font-weight:600; color:#fff;
+  border-radius:var(--r-lg); padding:16px;
+  background:var(--accent-600);
+  box-shadow:0 12px 28px rgba(76,115,101,.28);
+  transition:transform .2s cubic-bezier(.22,1,.36,1), box-shadow .25s ease, background .25s ease;
+}
+.sh__cta:hover{ background:var(--accent-700); transform:translateY(-2px); box-shadow:0 16px 34px rgba(76,115,101,.32); }
+.sh__cta:active{ transform:scale(.98); }
+
+/* =========================================================
+   RESPONSIVE — video is skipped below this width entirely by
+   js/hero-scroll.js (never requested, so no wasted bandwidth);
+   this just covers the brief instant before that JS runs.
+========================================================= */
+@media (max-width:760px){
+  .sh{ min-height:auto; padding:56px 0 40px; }
+  /* The video is skipped on phones, which left the hero flat black.
+     Its own poster frame gives the same look for a fraction of the data. */
+  .sh__video-wrap{
+    background:url('https://images.pexels.com/videos/4238760/pexels-photo-4238760.jpeg?auto=compress&cs=tinysrgb&w=900') center/cover no-repeat;
+  }
+  .sh__title{ font-size:clamp(2rem,8vw,2.6rem); }
+  .sh__card{ max-width:none; }
+}
+
+/* =========================================================
+   REDUCED MOTION — a calm, fully static frame: video never
+   starts (js/hero-scroll.js gates it), no streak sweep.
+========================================================= */
+@media (prefers-reduced-motion:reduce){
+  .sh__streak{ display:none; }
+}

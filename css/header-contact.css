@@ -1,0 +1,17 @@
+/* =========================================================
+   HEADER CONTACT PAIR — phone / email
+========================================================= */
+.header-contact{ display:flex; align-items:center; gap:10px; }
+.hc-link{
+  display:inline-flex; align-items:center; gap:6px;
+  color:var(--ink-600,#3e5852); font-size:.88rem; font-weight:500;
+  text-decoration:none; padding:6px 4px; white-space:nowrap;
+  transition:color .2s ease;
+}
+.hc-link svg{ width:16px; height:16px; flex:none; color:var(--mint-600,#0e9c87); }
+.hc-link:hover{ color:var(--mint-600,#0e9c87); }
+.hc-sep{ color:var(--ink-200,#d4e6e1); font-weight:300; }
+/* Below 1024px the labels crowd the row, so only the icons remain —
+   still tappable, still labelled for screen readers via aria-label. */
+@media (max-width:1024px){ .hc-link span{ display:none; } .header-contact{ gap:4px; } }
+@media (max-width:560px){ .header-contact{ display:none; } }

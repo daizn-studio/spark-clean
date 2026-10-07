@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<title>Admin Dashboard — Spark Clean</title>
+<meta name="robots" content="noindex, nofollow">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/admin.css">
+</head>
+<body class="admin-body">
+
+<header class="admin-topbar">
+  <div class="admin-topbar__inner">
+    <div class="logo">
+      <svg class="logo-mark" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+        <rect x="2" y="2" width="36" height="36" rx="11" fill="#2B343A"/>
+        <path d="M20 9c-4.6 4.4-7 8.6-7 11.8a7 7 0 0014 0C27 17.6 24.6 13.4 20 9Z" fill="#4C7365"/>
+        <path d="M20 15.5c-2.2 2.3-3.4 4.4-3.4 5.9a3.4 3.4 0 006.8 0c0-1.5-1.2-3.6-3.4-5.9Z" fill="#fff"/>
+        <circle cx="29" cy="12" r="1.9" fill="#84A897"/>
+        <circle cx="32.4" cy="16.4" r="1.2" fill="#AEC6BB"/>
+      </svg>
+      <span>Spark <strong>Clean</strong> — Admin</span>
+    </div>
+    <div class="topbar__meta">
+      <span class="pill" id="adminEmailPill"></span>
+      <button class="btn btn-ghost btn-sm" id="logoutBtn">Log out</button>
+    </div>
+  </div>
+</header>
+
+<main class="admin-shell">
+
+  <div id="demoModeBanner" class="notice notice-warn" hidden>
+    <strong>Demo mode:</strong> bookings shown here are read from this browser's local storage only
+    (created by testing the customer wizard on this machine) — not a shared, real database yet.
+    See README.md → "Moving off demo mode" to connect Supabase/Postgres so every visitor's bookings
+    land here for real.
+  </div>
+
+  <div id="newOrderBanner" class="notice notice--info notice-row" hidden>
+    <span id="newOrderText"></span>
+    <button class="btn btn-ghost" id="dismissNewOrderBtn">Dismiss</button>
+  </div>
+
+  <div id="todayReminderBanner" class="notice notice--info notice-row" hidden>
+    <span id="todayReminderText"></span>
+  </div>
+
+  <nav class="admin-tabs">
+    <button class="admin-tab is-active" data-panel="ordersPanel">Bookings</button>
+    <button class="admin-tab" data-panel="balancePanel">Balance sheet</button>
+    <button class="admin-tab" data-panel="aiPanel">AI prediction</button>
+    <button class="admin-tab" data-panel="feedbackPanel">Reviews</button>
+  </nav>
+
+  <!-- ---------------- BOOKINGS PANEL ---------------- -->
+  <section class="admin-panel is-active" id="ordersPanel">
+    <div class="orders-toolbar">
+      <input type="search" id="orderSearch" class="input" placeholder="Search name, phone, suburb or reference…" aria-label="Search bookings">
+      <select id="orderStatusFilter" class="input" aria-label="Filter by status">
+        <option value="">All statuses</option>
+        <option value="pending">Pending</option>
+        <option value="confirmed">Confirmed</option>
+        <option value="cancelled">Cancelled</option>
+      </select>
+      <button class="btn btn-ghost btn-sm" id="exportCsvBtn" type="button" title="Download the filtered bookings as a spreadsheet">Export CSV</button>
+    </div>
+    <p class="orders-count" id="ordersCount"></p>
+    <div class="orders-table-wrap">
+      <table class="orders-table">
+        <thead>
+          <tr>
+            <th>Customer</th>
+            <th>Service</th>
+            <th>Suburb</th>
+            <th>Preferred slot</th>
+            <th>Price</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="ordersTableBody"></tbody>
+      </table>
+    </div>
+    <div class="empty-state" id="ordersEmptyState" hidden>
+      No bookings yet. Complete a test booking on the main site and it'll show up here.
+    </div>
+  </section>
+
+  <!-- ---------------- BALANCE SHEET PANEL ---------------- -->
+  <section class="admin-panel" id="balancePanel">
+    <div class="balance-grid" id="balanceGrid"></div>
+    <h3 class="section-title">By service type</h3>
+    <div class="balance-grid" id="balanceByServiceGrid"></div>
+    <p class="field-hint">Confirmed and pending bookings only — cancelled bookings are excluded from all totals here. Business margin / subcontractor payout use the same 40/60 split as <span class="mono">calculateSubcontractorSplit()</span> in js/admin.js.</p>
+  </section>
+
+  <!-- ---------------- AI PREDICTION PANEL ---------------- -->
+  <section class="admin-panel" id="aiPanel">
+    <div class="balance-grid" id="forecastGrid"></div>
+    <p class="field-hint" id="forecastNote"></p>
+
+    <h3 class="section-title">Photo-based price adjustments</h3>
+    <p class="field-hint">Bookings where a customer's uploaded photo changed the estimate — see <span class="mono">computePhotoAdjustment()</span> in js/pricing.js (or the real vision API once <span class="mono">supabase/functions/verify-photo</span> is deployed).</p>
+    <div class="orders-table-wrap">
+      <table class="orders-table">
+        <thead><tr><th>Customer</th><th>Service</th><th>Adjustment</th><th>Effect on price</th></tr></thead>
+        <tbody id="aiAdjustmentsBody"></tbody>
+      </table>
+    </div>
+    <div class="empty-state" id="aiAdjustmentsEmptyState" hidden>No photo-adjusted bookings yet.</div>
+  </section>
+
+  <!-- ---------------- FEEDBACK PANEL ---------------- -->
+  <section class="admin-panel" id="feedbackPanel">
+    <div id="feedbackList"></div>
+    <div class="empty-state" id="feedbackEmptyState" hidden>
+      No customer reviews yet.
+    </div>
+  </section>
+</main>
+
+<!-- ---------------- ORDER DETAIL DRAWER ---------------- -->
+<div class="detail-drawer" id="detailDrawer" hidden>
+  <div class="detail-drawer__inner">
+    <div class="detail-drawer__header">
+      <h2>Booking detail</h2>
+      <button class="link-btn" id="detailCloseBtn">Close ✕</button>
+    </div>
+
+    <div class="detail-summary" id="detailSummary"></div>
+
+    <div class="field">
+      <label for="confirmDate">Confirmed date</label>
+      <input type="date" id="confirmDate" class="input">
+    </div>
+    <div class="field">
+      <label for="confirmTime">Confirmed time</label>
+      <input type="time" id="confirmTime" class="input">
+    </div>
+    <div class="field">
+      <label for="extraChargeInput">Extra charge (AUD, if any — e.g. access issue, extra room found on-site)</label>
+      <input type="number" id="extraChargeInput" class="input" min="0" step="5" value="0">
+    </div>
+    <div class="field">
+      <label for="extraChargeReason">Reason for extra charge</label>
+      <input type="text" id="extraChargeReason" class="input" placeholder="e.g. additional bathroom found on arrival">
+    </div>
+
+    <p class="field-hint" id="detailTotalNote"></p>
+
+    <div class="detail-actions">
+      <button class="btn btn-primary" id="acceptOrderBtn">Accept &amp; confirm</button>
+      <button class="btn btn--danger" id="cancelOrderBtn">Cancel order</button>
+    </div>
+    <button class="btn btn-ghost btn-block" id="saveDetailBtn" style="margin-top:.8rem;">Save changes</button>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../js/config.js"></script>
+<script src="../js/supabase-client.js"></script>
+<script src="../js/admin-auth.js"></script>
+<script src="../js/pricing.js"></script>
+<script src="../js/admin.js"></script>
+<script src="../js/admin-dashboard.js"></script>
+</body>
+</html>

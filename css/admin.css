@@ -1,0 +1,148 @@
+/* =========================================================
+   ADMIN-ONLY STYLES
+   Loaded only on /admin/*.html — never shipped to customers.
+   Uses the same tokens as css/style.css.
+========================================================= */
+
+.admin-body{ background:var(--bg-cream); }
+
+/* ---------------- LOGIN ---------------- */
+.admin-login-wrap{ min-height:100vh; min-height:100dvh; display:flex; align-items:center; justify-content:center; padding:var(--sp-5); }
+.admin-login-card{
+  background:#fff; border:1px solid var(--ink-100);
+  border-radius:var(--r-xl); padding:var(--sp-6);
+  width:100%; max-width:420px; box-shadow:var(--sh-sm);
+}
+.admin-login-title{ text-align:center; font-size:1.8rem; }
+.admin-login-card .step-sub,
+.admin-login-card .step-subtitle{ text-align:center; color:var(--ink-500); font-size:.9rem; margin-bottom:var(--sp-5); }
+
+/* ---------------- DASHBOARD SHELL ---------------- */
+.admin-topbar{ background:#fff; border-bottom:1px solid var(--ink-100); position:sticky; top:0; z-index:20; }
+.admin-topbar__inner{
+  max-width:1200px; margin:0 auto; padding:var(--sp-3) var(--sp-5);
+  display:flex; align-items:center; justify-content:space-between; gap:var(--sp-4);
+}
+.admin-shell{ max-width:1200px; margin:0 auto; padding:var(--sp-6) var(--sp-5) var(--sp-9); }
+
+.admin-tabs{
+  display:flex; gap:var(--sp-1); border-bottom:1px solid var(--ink-100);
+  margin-bottom:var(--sp-5); overflow-x:auto; scrollbar-width:none;
+}
+.admin-tabs::-webkit-scrollbar{ display:none; }
+.admin-tab{
+  background:none; border:0; border-bottom:2px solid transparent;
+  color:var(--ink-500); font:inherit; font-weight:600;
+  padding:var(--sp-3) var(--sp-4); cursor:pointer; white-space:nowrap;
+  transition:color .2s ease, border-color .2s ease;
+}
+.admin-tab:hover{ color:var(--teal-700); }
+.admin-tab.is-active{ color:var(--mint-600); border-bottom-color:var(--mint-500); }
+
+.admin-panel{ display:none; }
+.admin-panel.is-active{ display:block; }
+.section-title{ font-size:1.3rem; margin:var(--sp-6) 0 var(--sp-3); }
+
+/* ---------------- BOOKINGS TOOLBAR ---------------- */
+.orders-toolbar{ display:flex; gap:var(--sp-3); margin-bottom:var(--sp-3); flex-wrap:wrap; }
+.orders-toolbar #orderSearch{ flex:2; min-width:220px; }
+.orders-toolbar #orderStatusFilter{ flex:1; min-width:150px; }
+.orders-toolbar .btn{ flex:none; }
+.orders-count{ font-size:.84rem; color:var(--ink-400); margin-bottom:var(--sp-3); }
+
+/* ---------------- TABLES ---------------- */
+.orders-table-wrap{ overflow-x:auto; -webkit-overflow-scrolling:touch; }
+.orders-table{
+  width:100%; min-width:640px; border-collapse:collapse;
+  background:#fff; border:1px solid var(--ink-100);
+  border-radius:var(--r-md); overflow:hidden;
+}
+.orders-table th{
+  text-align:left; font-size:.82rem; font-weight:600; color:var(--ink-500);
+  padding:var(--sp-3) var(--sp-4); background:var(--mint-50); border-bottom:1px solid var(--ink-100);
+}
+.orders-table td{
+  padding:var(--sp-3) var(--sp-4); border-top:1px solid var(--ink-100);
+  font-size:.88rem; color:var(--ink-600);
+}
+.orders-table tbody tr{ cursor:pointer; transition:background .15s ease; }
+.orders-table tbody tr:hover td{ background:var(--mint-50); color:var(--ink-800); }
+.orders-table tbody tr.is-hidden{ display:none; }
+
+.status-badge{
+  display:inline-block; padding:.25rem .65rem; border-radius:var(--r-full);
+  font-size:.75rem; font-weight:600; text-transform:capitalize;
+}
+.status-badge--pending{ background:#f6f1e4; color:#7a5c22; border:1px solid rgba(201,154,62,.35); }
+.status-badge--confirmed{ background:var(--mint-50); color:var(--mint-600); border:1px solid var(--mint-200); }
+.status-badge--cancelled{ background:#fdeceb; color:var(--err-500); border:1px solid rgba(192,57,43,.3); }
+
+.empty-state{
+  padding:var(--sp-8) var(--sp-5); text-align:center;
+  color:var(--ink-400); font-size:.9rem;
+  background:#fff; border:1px dashed var(--ink-200); border-radius:var(--r-md);
+}
+
+/* ---------------- STAT CARDS ---------------- */
+.stat-grid,.balance-grid{
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
+  gap:var(--sp-4); margin-bottom:var(--sp-5);
+}
+.stat-card{ background:#fff; border:1px solid var(--ink-100); border-radius:var(--r-md); padding:var(--sp-5); }
+.stat-card__label{ font-size:.82rem; color:var(--ink-400); margin-bottom:6px; }
+.stat-card__value{
+  font-family:var(--font-display); font-weight:700; font-size:1.8rem;
+  color:var(--teal-700); font-variant-numeric:tabular-nums; line-height:1;
+}
+.stat-card--accent .stat-card__value{ color:var(--mint-600); }
+
+/* ---------------- DETAIL DRAWER ---------------- */
+.drawer-backdrop,.detail-drawer{
+  position:fixed; inset:0; z-index:1200;
+  background:rgba(18,23,26,.5); backdrop-filter:blur(5px); -webkit-backdrop-filter:blur(5px);
+  display:flex; justify-content:flex-end;
+}
+.drawer,.detail-drawer__inner{
+  background:#fff; border-left:1px solid var(--ink-100);
+  width:100%; max-width:470px; height:100%; overflow-y:auto; padding:var(--sp-6);
+}
+.detail-drawer__header{ display:flex; justify-content:space-between; align-items:center; margin-bottom:var(--sp-4); }
+.drawer h3{ margin-bottom:var(--sp-4); }
+.drawer__row,.detail-summary > div{
+  display:flex; justify-content:space-between; gap:var(--sp-4);
+  padding:10px 0; border-bottom:1px solid var(--ink-100);
+  font-size:.88rem; color:var(--ink-600);
+}
+.drawer__row span:last-child,.detail-summary > div span:last-child{ color:var(--ink-800); font-weight:600; text-align:right; }
+.detail-summary{ display:grid; gap:2px; margin-bottom:var(--sp-5); }
+.detail-actions{ display:flex; gap:var(--sp-3); flex-wrap:wrap; margin-top:var(--sp-5); }
+.detail-actions .btn{ flex:1; min-width:130px; }
+
+/* ---------------- REVIEWS ---------------- */
+.review-card{
+  background:#fff; border:1px solid var(--ink-100);
+  border-radius:var(--r-md); padding:var(--sp-4) var(--sp-5); margin-bottom:var(--sp-3);
+}
+.review-card__stars{ color:var(--orange-500); letter-spacing:.12em; }
+.review-card__comment{ color:var(--ink-600); font-size:.9rem; margin:8px 0 0; }
+
+/* ---------------- LEGACY CLASS ALIASES ----------------
+   Older admin markup used BEM-style modifiers. These keep those
+   pages styled without rewriting their HTML wholesale. */
+.btn--primary{ background:var(--orange-500); color:#fff; box-shadow:0 6px 20px rgba(201,154,62,.35); }
+.btn--primary:hover:not(:disabled){ background:var(--orange-600); color:#fff; }
+.btn--ghost{ background:transparent; color:var(--teal-700); border:2px solid var(--ink-200); }
+.btn--ghost:hover:not(:disabled){ border-color:var(--mint-500); color:var(--mint-600); }
+.btn--danger{ background:var(--err-500); color:#fff; }
+.btn--danger:hover:not(:disabled){ background:#a5322a; color:#fff; }
+.btn--block{ width:100%; }
+.btn--sm{ padding:10px 20px; font-size:.9rem; }
+.notice--warn{ background:#f6f1e4; border:1px solid rgba(201,154,62,.35); color:#7a5c22; padding:14px 18px; border-radius:var(--r-md); font-size:.9rem; margin:var(--sp-4) 0; }
+.notice--info{ background:var(--mint-50); border:1px solid var(--mint-200); color:#0a5a4e; padding:14px 18px; border-radius:var(--r-md); font-size:.9rem; margin:var(--sp-4) 0; }
+.field-row{ margin-bottom:var(--sp-5); }
+.microcopy{ font-size:.84rem; color:var(--ink-400); }
+.step-sub{ color:var(--ink-500); font-size:.95rem; }
+.badge{ display:inline-block; padding:.25rem .65rem; border-radius:var(--r-full); font-size:.75rem; font-weight:600; text-transform:capitalize; }
+.badge--pending{ background:#f6f1e4; color:#7a5c22; border:1px solid rgba(201,154,62,.35); }
+.badge--confirmed{ background:var(--mint-50); color:var(--mint-600); border:1px solid var(--mint-200); }
+.badge--cancelled{ background:#fdeceb; color:var(--err-500); border:1px solid rgba(192,57,43,.3); }

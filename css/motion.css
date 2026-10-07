@@ -1,0 +1,160 @@
+/* =========================================================
+   SPARK CLEAN — Motion System
+   Every animation relates to cleaning. Nothing generic.
+
+   SAFETY RULE: no element is hidden by default. Reveal states
+   are scoped to .motion-ready, which js/motion.js adds only
+   once it has loaded and can reveal them again. If that file
+   fails, the page renders fully visible instead of blank.
+========================================================= */
+
+/* ---------- INTRO SQUEEGEE CURTAIN ---------- */
+.intro-curtain{ display:none; }
+.motion-ready .intro-curtain{
+  display:block; position:fixed; inset:0; z-index:5000;
+  background:var(--teal-900); overflow:hidden;
+}
+.intro-curtain .squeegee-blade{
+  position:absolute; top:0; bottom:0; left:-10%; width:5%; z-index:2;
+  background:linear-gradient(90deg,rgba(255,255,255,0),rgba(255,255,255,.18) 40%,rgba(255,255,255,.9) 50%,rgba(255,255,255,.18) 60%,rgba(255,255,255,0));
+  box-shadow:0 0 40px rgba(93,138,121,.3);
+}
+.intro-curtain .foam-trail{
+  position:absolute; top:0; bottom:0; left:0; width:0; z-index:1;
+  background:linear-gradient(90deg,rgba(174,198,187,0),rgba(174,198,187,.28) 70%,rgba(174,198,187,.5));
+}
+.intro-curtain .intro-word{
+  position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); z-index:3;
+  color:rgba(250,247,240,.9); font-family:var(--font-display); font-weight:700;
+  letter-spacing:.2em; text-transform:uppercase; font-size:.9rem; opacity:0;
+  animation:introWord .5s ease-out .25s forwards;
+}
+@keyframes introWord{ to{ opacity:1; } }
+.intro-curtain.run .squeegee-blade{ animation:squeegeeSweep 1.8s cubic-bezier(.55,.08,.32,.99) forwards; }
+.intro-curtain.run .foam-trail{ animation:foamGrow 1.8s cubic-bezier(.55,.08,.32,.99) forwards; }
+.intro-curtain.done{ opacity:0; transition:opacity .25s ease; }
+@keyframes squeegeeSweep{ 0%{ left:-10%; } 100%{ left:110%; } }
+@keyframes foamGrow{ 0%{ width:0; opacity:0; } 30%{ opacity:1; } 100%{ width:110%; opacity:0; } }
+
+/* ---------- WIZARD STEP WIPE ---------- */
+.page-wipe{ position:fixed; inset:0; z-index:4500; pointer-events:none; display:none; }
+.motion-ready .page-wipe{ display:block; }
+.page-wipe .wipe-blade{
+  position:absolute; top:0; bottom:0; width:0;
+  background:linear-gradient(90deg,var(--teal-700),var(--mint-500));
+  box-shadow:4px 0 30px rgba(93,138,121,.22);
+}
+.page-wipe .wipe-foam{
+  position:absolute; top:0; bottom:0; width:0;
+  background:linear-gradient(90deg,rgba(255,255,255,0),rgba(174,198,187,.35));
+}
+.page-wipe.sweep-forward .wipe-blade{ animation:wipeBladeFwd .82s cubic-bezier(.6,.02,.4,1) forwards; }
+.page-wipe.sweep-forward .wipe-foam{ animation:wipeFoamFwd .82s cubic-bezier(.6,.02,.4,1) forwards; }
+.page-wipe.sweep-backward .wipe-blade{ animation:wipeBladeBwd .82s cubic-bezier(.6,.02,.4,1) forwards; }
+.page-wipe.sweep-backward .wipe-foam{ animation:wipeFoamBwd .82s cubic-bezier(.6,.02,.4,1) forwards; }
+@keyframes wipeBladeFwd{ 0%{ left:-12%; width:12%; } 45%{ left:0; width:100%; } 100%{ left:100%; width:12%; } }
+@keyframes wipeFoamFwd{ 0%{ left:-12%; width:0; } 45%{ left:0; width:100%; } 100%{ left:100%; width:0; } }
+@keyframes wipeBladeBwd{ 0%{ right:-12%; width:12%; } 45%{ right:0; width:100%; } 100%{ right:100%; width:12%; } }
+@keyframes wipeFoamBwd{ 0%{ right:-12%; width:0; } 45%{ right:0; width:100%; } 100%{ right:100%; width:0; } }
+
+/* ---------- BUBBLES ---------- */
+.bubble{
+  position:absolute; bottom:-60px; border-radius:50%;
+  background:radial-gradient(circle at 30% 30%,rgba(255,255,255,.75),rgba(174,198,187,.22));
+  border:1px solid rgba(255,255,255,.35); opacity:0;
+  animation:bubbleRise linear infinite; pointer-events:none;
+}
+@keyframes bubbleRise{
+  0%{ bottom:-60px; opacity:0; transform:translateX(0) scale(.8); }
+  10%{ opacity:.6; }
+  50%{ transform:translateX(22px) scale(1); }
+  90%{ opacity:.35; }
+  100%{ bottom:110%; opacity:0; transform:translateX(-22px) scale(1.12); }
+}
+
+/* ---------- SCROLL REVEAL (squeegee-in) ----------
+   Gentle fade + slight rise, nothing wipe-like or bouncy — a
+   restrained entrance that suits a calm, premium page. */
+.motion-ready .reveal{ opacity:0; }
+.motion-ready .reveal.squeegee-in{ animation:squeegeeReveal .8s cubic-bezier(.22,1,.36,1) forwards; }
+.motion-ready .reveal.squeegee-in-right{ animation:squeegeeRevealRight .8s cubic-bezier(.22,1,.36,1) forwards; }
+.motion-ready .reveal.squeegee-in-up{ animation:squeegeeRevealUp .8s cubic-bezier(.22,1,.36,1) forwards; }
+@keyframes squeegeeReveal{
+  0%{ transform:translateY(16px); opacity:0; }
+  100%{ transform:none; opacity:1; }
+}
+@keyframes squeegeeRevealRight{
+  0%{ transform:translateY(16px); opacity:0; }
+  100%{ transform:none; opacity:1; }
+}
+@keyframes squeegeeRevealUp{
+  0%{ transform:translateY(20px); opacity:0; }
+  100%{ transform:none; opacity:1; }
+}
+
+/* ---------- MOP STROKE DIVIDER ---------- */
+.mop-divider{
+  height:3px; width:0; margin:0 auto; max-width:640px; border-radius:2px;
+  background:linear-gradient(90deg,transparent,var(--mint-500) 20%,var(--mint-400) 50%,var(--mint-500) 80%,transparent);
+}
+.mop-divider.mop-stroke{ animation:mopSwipe 1s cubic-bezier(.4,0,.2,1) forwards; }
+@keyframes mopSwipe{ 0%{ width:0; opacity:0; } 20%{ opacity:1; } 100%{ width:100%; opacity:.65; } }
+
+/* ---------- RESPONSE MOTION ---------- */
+.price-tick{ animation:priceTick .35s ease-out; }
+@keyframes priceTick{
+  0%{ opacity:.5; transform:translateY(3px); } 100%{ opacity:1; transform:none; }
+}
+.price-breakdown > div{ animation:cascadeIn .45s cubic-bezier(.22,1,.36,1) backwards; }
+.price-breakdown > div:nth-child(1){ animation-delay:.02s; }
+.price-breakdown > div:nth-child(2){ animation-delay:.07s; }
+.price-breakdown > div:nth-child(3){ animation-delay:.12s; }
+.price-breakdown > div:nth-child(4){ animation-delay:.17s; }
+.price-breakdown > div:nth-child(n+5){ animation-delay:.22s; }
+@keyframes cascadeIn{
+  0%{ opacity:0; transform:translateY(8px); }
+  100%{ opacity:1; transform:none; }
+}
+.spray-ring{ position:relative; }
+.spray-ring.pulse::before,.spray-ring.pulse::after{
+  content:''; position:absolute; top:50%; left:50%; width:20px; height:20px;
+  border:2px solid var(--mint-400); border-radius:50%;
+  transform:translate(-50%,-50%); animation:sprayPulse .85s ease-out forwards;
+}
+.spray-ring.pulse::after{ animation-delay:.2s; }
+@keyframes sprayPulse{ 0%{ width:20px; height:20px; opacity:1; } 100%{ width:90px; height:90px; opacity:0; } }
+.confirmation-check.run .check-circle{ animation:drawCircle .6s cubic-bezier(.4,0,.2,1) forwards; }
+.confirmation-check.run .check-mark{ animation:drawCheck .4s .5s cubic-bezier(.4,0,.2,1) forwards; }
+@keyframes drawCircle{ to{ stroke-dashoffset:0; } }
+@keyframes drawCheck{ to{ stroke-dashoffset:0; } }
+.step-content-fade{ animation:stepFadeIn .4s ease forwards; }
+@keyframes stepFadeIn{ 0%{ opacity:0; transform:translateY(12px); } 100%{ opacity:1; transform:none; } }
+.stepper__item.is-active .progress-dot{ animation:dotPop .35s ease-out; }
+@keyframes dotPop{ 0%{ transform:scale(.92); opacity:.6; } 100%{ transform:scale(1); opacity:1; } }
+.modal{ animation:modalIn .32s cubic-bezier(.2,.8,.2,1); }
+@keyframes modalIn{ from{ opacity:0; transform:translateY(16px) scale(.97); } to{ opacity:1; transform:none; } }
+.modal-overlay{ animation:fadeIn .25s ease-out; }
+@keyframes fadeIn{ from{ opacity:0; } to{ opacity:1; } }
+
+/* =========================================================
+   REDUCED MOTION — one block, last, so it reliably wins.
+   Everything resolves to its final visible state instantly.
+========================================================= */
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{
+    animation-duration:.001ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:.001ms !important;
+    scroll-behavior:auto !important;
+  }
+  .intro-curtain,.page-wipe,.bubble{ display:none !important; }
+  .motion-ready .reveal,
+  .motion-ready .reveal.squeegee-in,
+  .motion-ready .reveal.squeegee-in-right,
+  .motion-ready .reveal.squeegee-in-up{
+    opacity:1 !important; clip-path:none !important; transform:none !important; animation:none !important;
+  }
+  .mop-divider{ width:100% !important; opacity:.6 !important; animation:none !important; }
+  .price-breakdown > div{ opacity:1 !important; transform:none !important; clip-path:none !important; animation:none !important; }
+  .check-circle,.check-mark{ stroke-dashoffset:0 !important; animation:none !important; }
+}

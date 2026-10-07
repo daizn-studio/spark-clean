@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<title>Rate your clean — Spark Clean</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<script>document.documentElement.classList.add('js-ready');</script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <a href="index.html" class="logo">
+      <svg class="logo-mark" viewBox="0 0 44 44" fill="none" aria-hidden="true">
+        <defs>
+          <linearGradient id="scTile" x1="0" y1="0" x2="44" y2="44" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#4C7365"/><stop offset="1" stop-color="#12171A"/>
+          </linearGradient>
+          <linearGradient id="scSpark" x1="12" y1="8" x2="34" y2="34" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#FFFFFF"/><stop offset="1" stop-color="#AEC6BB"/>
+          </linearGradient>
+        </defs>
+        <rect x="1.5" y="1.5" width="41" height="41" rx="13" fill="url(#scTile)"/>
+        <rect x="1.5" y="1.5" width="41" height="41" rx="13" stroke="#AEC6BB" stroke-opacity=".28" stroke-width="1"/>
+        <path d="M22 9.5c1.6 6.2 3.3 7.9 9.5 9.5-6.2 1.6-7.9 3.3-9.5 9.5-1.6-6.2-3.3-7.9-9.5-9.5 6.2-1.6 7.9-3.3 9.5-9.5Z" fill="url(#scSpark)"/>
+        <path d="M31.5 26.5c.8 3 1.6 3.8 4.6 4.6-3 .8-3.8 1.6-4.6 4.6-.8-3-1.6-3.8-4.6-4.6 3-.8 3.8-1.6 4.6-4.6Z" fill="#AEC6BB" fill-opacity=".92"/>
+        <circle cx="13.6" cy="31.4" r="1.9" fill="#AEC6BB" fill-opacity=".75"/>
+      </svg>
+      <span>Spark Clean</span>
+    </a>
+  </div>
+</header>
+
+<main class="feedback-wrap">
+  <div class="feedback-card">
+
+    <div id="formView">
+      <h2>How was your clean?</h2>
+      <p class="step-subtitle">Your feedback goes straight to the team — including anything that needs fixing.</p>
+
+      <div class="field">
+        <label class="field-label" for="feedbackName">Your name <span class="hint">(optional — shown next to your review on our site)</span></label>
+        <input id="feedbackName" class="input" type="text" placeholder="Jordan Smith" maxlength="80">
+      </div>
+
+      <div class="field">
+        <label class="field-label">Rating</label>
+        <div class="star-row" id="starInput">
+          <button class="star" type="button" data-star="1">★</button>
+          <button class="star" type="button" data-star="2">★</button>
+          <button class="star" type="button" data-star="3">★</button>
+          <button class="star" type="button" data-star="4">★</button>
+          <button class="star" type="button" data-star="5">★</button>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="field-label" for="feedbackComment">Comments <span class="hint">(let us know if anything was missed, or about the cleaner's work)</span></label>
+        <textarea id="feedbackComment" class="input" rows="5" placeholder="Tell us how it went..."></textarea>
+      </div>
+
+      <div class="field-error" id="feedbackError" role="alert"></div>
+      <button class="btn btn-primary btn-block" id="submitFeedbackBtn">Submit feedback</button>
+    </div>
+
+    <div id="thanksView" hidden>
+      <h2>Thanks for your feedback</h2>
+      <p class="step-subtitle">We've passed this on to the team. If you flagged an issue, someone will be in touch to make it right.</p>
+    </div>
+
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/config.js"></script>
+<script src="js/supabase-client.js"></script>
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const bookingId = params.get('bookingId') || null;
+
+  let selectedRating = 0;
+  const starButtons = document.querySelectorAll('#starInput button');
+  starButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      selectedRating = parseInt(btn.dataset.star, 10);
+      starButtons.forEach(b => b.classList.toggle('is-on', parseInt(b.dataset.star, 10) <= selectedRating));
+    });
+  });
+
+  document.getElementById('submitFeedbackBtn').addEventListener('click', async () => {
+    const errorEl = document.getElementById('feedbackError');
+    if (selectedRating === 0) {
+      errorEl.textContent = 'Please select a star rating before submitting.';
+      return;
+    }
+    errorEl.textContent = '';
+
+    const entry = {
+      bookingId,
+      rating: selectedRating,
+      comment: document.getElementById('feedbackComment').value.trim(),
+      reviewerName: document.getElementById('feedbackName').value.trim() || null,
+      submittedAt: new Date().toISOString()
+    };
+
+    if (CONFIG.FUNCTIONS_URL) {
+      try {
+        const response = await fetch(`${CONFIG.FUNCTIONS_URL}/submit-feedback`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${CONFIG.SUPABASE_ANON_KEY}`,
+            'apikey': CONFIG.SUPABASE_ANON_KEY
+          },
+          body: JSON.stringify(entry)
+        });
+        if (response.status === 429) {
+          const result = await response.json().catch(() => ({}));
+          errorEl.textContent = result.error || 'Too many submissions right now — please try again later.';
+          return;
+        }
+        if (!response.ok) {
+          const result = await response.json().catch(() => ({}));
+          throw new Error(result.error || `Server returned ${response.status}`);
+        }
+        document.getElementById('formView').hidden = true;
+        document.getElementById('thanksView').hidden = false;
+        return;
+      } catch (err) {
+        console.error('[feedback] submit-feedback function failed, falling back to local storage:', err);
+      }
+    }
+
+    // Demo/offline fallback — same localStorage pattern as bookings.
+    const KEY = 'sparkCleanFeedback';
+    const existing = JSON.parse(localStorage.getItem(KEY) || '[]');
+    existing.push(entry);
+    localStorage.setItem(KEY, JSON.stringify(existing));
+
+    document.getElementById('formView').hidden = true;
+    document.getElementById('thanksView').hidden = false;
+  });
+</script>
+</body>
+</html>

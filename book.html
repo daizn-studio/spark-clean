@@ -1,0 +1,725 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<title>Book Your Clean — Spark Clean Melbourne</title>
+<meta name="description" content="Get a real, itemised price for your end-of-lease or office clean in 60 seconds. Book and pay online.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/motion.css">
+<link rel="stylesheet" href="css/header-contact.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+</head>
+<body class="wizard-page">
+
+<div id="connectionBanner" class="connection-banner" hidden>
+  Connection lost. Your answers are saved. Reconnect to continue.
+</div>
+
+<div id="pageWipe" class="page-wipe" aria-hidden="true">
+  <div class="wipe-foam"></div>
+  <div class="wipe-blade"></div>
+</div>
+
+<header class="site-header">
+  <div class="container">
+    <a href="index.html" class="logo">
+      <svg class="logo-mark" viewBox="0 0 44 44" fill="none" aria-hidden="true">
+        <defs>
+          <linearGradient id="scTile" x1="0" y1="0" x2="44" y2="44" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#4C7365"/><stop offset="1" stop-color="#12171A"/>
+          </linearGradient>
+          <linearGradient id="scSpark" x1="12" y1="8" x2="34" y2="34" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#FFFFFF"/><stop offset="1" stop-color="#AEC6BB"/>
+          </linearGradient>
+        </defs>
+        <rect x="1.5" y="1.5" width="41" height="41" rx="13" fill="url(#scTile)"/>
+        <rect x="1.5" y="1.5" width="41" height="41" rx="13" stroke="#AEC6BB" stroke-opacity=".28" stroke-width="1"/>
+        <path d="M22 9.5c1.6 6.2 3.3 7.9 9.5 9.5-6.2 1.6-7.9 3.3-9.5 9.5-1.6-6.2-3.3-7.9-9.5-9.5 6.2-1.6 7.9-3.3 9.5-9.5Z" fill="url(#scSpark)"/>
+        <path d="M31.5 26.5c.8 3 1.6 3.8 4.6 4.6-3 .8-3.8 1.6-4.6 4.6-.8-3-1.6-3.8-4.6-4.6 3-.8 3.8-1.6 4.6-4.6Z" fill="#AEC6BB" fill-opacity=".92"/>
+        <circle cx="13.6" cy="31.4" r="1.9" fill="#AEC6BB" fill-opacity=".75"/>
+      </svg>
+      <span>Spark Clean</span>
+    </a>
+    <div class="header-actions">
+      <div class="header-contact">
+        <a class="hc-link" href="tel:+61469739149" aria-label="Call Spark Clean on 0469 739 149">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M22 16.9v3a2 2 0 01-2.2 2 19.8 19.8 0 01-8.6-3.1 19.5 19.5 0 01-6-6A19.8 19.8 0 012.1 4.2 2 2 0 014.1 2h3a2 2 0 012 1.7c.1 1 .4 1.9.7 2.8a2 2 0 01-.5 2.1L8.1 9.9a16 16 0 006 6l1.3-1.2a2 2 0 012.1-.5c.9.3 1.8.6 2.8.7a2 2 0 011.7 2z"/>
+          </svg>
+          <span>Contact us</span>
+        </a>
+        <span class="hc-sep" aria-hidden="true">|</span>
+        <a class="hc-link" href="mailto:sparkclean09@gmail.com" aria-label="Email sparkclean09@gmail.com">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 6 10-6"/>
+          </svg>
+          <span>Email</span>
+        </a>
+      </div>
+      <span class="pill" id="locationPill">Melbourne, VIC</span>
+      <button id="myBookingBtn" class="btn btn-ghost btn-sm" type="button">Track my booking</button>
+    </div>
+  </div>
+</header>
+
+<nav class="wizard-progress" aria-label="Booking progress">
+  <div class="wizard-progress-inner">
+    <span class="stepper__item is-active" data-step="1"><span class="progress-dot">1</span>Personal Details</span>
+    <span class="progress-line"></span>
+    <span class="stepper__item" data-step="2"><span class="progress-dot">2</span>Conditions</span>
+    <span class="progress-line"></span>
+    <span class="stepper__item" data-step="3"><span class="progress-dot">3</span>AI Photos</span>
+    <span class="progress-line"></span>
+    <span class="stepper__item" data-step="4"><span class="progress-dot">4</span>Order Review</span>
+    <span class="progress-line"></span>
+    <span class="stepper__item" data-step="5"><span class="progress-dot">5</span>Payment</span>
+  </div>
+</nav>
+
+<div class="wizard-layout">
+  <div class="wizard-main">
+
+    <!-- STEP 1 -->
+    <section class="step is-active" data-step="1">
+      <div class="step-illustration reveal">
+        <img src="https://images.pexels.com/photos/6632424/pexels-photo-6632424.jpeg?auto=compress&cs=tinysrgb&w=700"
+             alt="A person typing on a laptop at home, booking online" loading="lazy">
+      </div>
+      <h2 class="step-title">Personal Details</h2>
+      <p class="step-subtitle">Tell us who you are and where the property is — everything else builds your price from here.</p>
+
+      <div class="grid-2">
+        <div class="field">
+          <label class="field-label" for="custName">Full name</label>
+          <input id="custName" class="input" type="text" placeholder="Jordan Smith">
+          <span id="custNameError" class="field-error" role="alert"></span>
+        </div>
+        <div class="field">
+          <label class="field-label" for="custPhone">Phone</label>
+          <input id="custPhone" class="input" type="tel" placeholder="04xx xxx xxx or 03 xxxx xxxx">
+          <span id="custPhoneError" class="field-error" role="alert"></span>
+        </div>
+        <div class="field" style="grid-column:1/-1">
+          <label class="field-label" for="custEmail">Email</label>
+          <input id="custEmail" class="input" type="email" placeholder="you@example.com">
+          <span id="custEmailError" class="field-error" role="alert"></span>
+        </div>
+        <div class="field">
+          <label class="field-label" for="preferredDate">Preferred date</label>
+          <input id="preferredDate" class="input" type="date">
+          <p class="field-hint">Booking within 48 hours adds a 10% urgent-booking charge. 3+ days out, no extra charge.</p>
+        </div>
+        <div class="field">
+          <label class="field-label" for="preferredTime">Preferred time</label>
+          <select id="preferredTime" class="input">
+            <option value="morning">Morning (8am – 12pm)</option>
+            <option value="evening">Evening (1pm – 5pm)</option>
+          </select>
+        </div>
+        <div class="field" style="grid-column:1/-1;margin-bottom:0">
+          <span id="scheduleError" class="field-error" role="alert"></span>
+        </div>
+      </div>
+
+      <p class="field-hint">This is your preferred slot. We confirm the exact time and text you if it shifts.</p>
+
+      <h3 class="substep-title">Where's the property?</h3>
+      <p class="step-subtitle">Your suburb sets coverage and pricing. Nothing else changes it.</p>
+
+      <div class="field">
+        <label class="field-label" for="serviceCity">City</label>
+        <select id="serviceCity" class="input">
+          <option value="melbourne">Melbourne, VIC — currently servicing</option>
+          <option value="sydney" disabled>Sydney, NSW — coming soon</option>
+          <option value="brisbane" disabled>Brisbane, QLD — coming soon</option>
+          <option value="perth" disabled>Perth, WA — coming soon</option>
+          <option value="adelaide" disabled>Adelaide, SA — coming soon</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label class="field-label" for="serviceSuburb">Suburb, address, or a well-known place</label>
+        <input id="serviceSuburb" class="input" type="text" placeholder="e.g. Carlton, 12 Smith St Fitzroy, or Federation Square">
+        <div id="locationMap" class="map-container" style="margin-top:12px"></div>
+        <p class="field-hint" id="mapStatus">Type a suburb, house number/street, or a landmark — we'll pinpoint it as long as it's in Melbourne.</p>
+      </div>
+
+      <h3 class="substep-title">Pick your service</h3>
+      <p class="step-subtitle">Each one prices differently. Your quote builds from here.</p>
+
+      <div class="toggle-group">
+        <button id="tabResidential" class="toggle-btn is-active" type="button" role="tab" aria-selected="true">
+          <h4>End of lease</h4>
+          <p>Vacate clean, to the standard agents inspect against.</p>
+        </button>
+        <button id="tabCommercial" class="toggle-btn" type="button" role="tab" aria-selected="false">
+          <h4>Office &amp; commercial</h4>
+          <p>Workplaces, retail and commercial spaces. From $180 per job.</p>
+        </button>
+        <button id="tabSteam" class="toggle-btn" type="button" role="tab" aria-selected="false">
+          <h4>Carpet steam clean</h4>
+          <p>Steam cleaning on its own. From $150 per job.</p>
+        </button>
+      </div>
+
+      <p id="serviceDescription" class="step-subtitle" style="margin-top:24px;margin-bottom:0"></p>
+
+      <h3 class="substep-title">Size the job</h3>
+      <p class="step-subtitle">Your price updates with every answer. Item prices below are before GST; your estimate includes it.</p>
+      <span id="propertySizeError" class="field-error" role="alert"></span>
+
+      <div id="panelResidential" class="service-panel is-visible">
+        <div class="stepper-row">
+          <span class="stepper-label">Bedrooms<small class="stepper-hint">Sets your base package price</small></span>
+          <div class="stepper-control">
+            <button class="stepper-btn" data-dec="bedrooms" type="button" aria-label="Fewer bedrooms">−</button>
+            <input id="bedrooms" type="number" value="0" min="0" max="20" inputmode="numeric">
+            <button class="stepper-btn" data-inc="bedrooms" type="button" aria-label="More bedrooms">+</button>
+          </div>
+        </div>
+        <div class="stepper-row">
+          <span class="stepper-label">Bathrooms<small class="stepper-hint">+$60 each beyond what's included</small></span>
+          <div class="stepper-control">
+            <button class="stepper-btn" data-dec="bathrooms" type="button" aria-label="Fewer bathrooms">−</button>
+            <input id="bathrooms" type="number" value="1" min="0" max="20" inputmode="numeric">
+            <button class="stepper-btn" data-inc="bathrooms" type="button" aria-label="More bathrooms">+</button>
+          </div>
+        </div>
+        <div class="stepper-row">
+          <span class="stepper-label">Kitchens<small class="stepper-hint">+$70 each beyond the first</small></span>
+          <div class="stepper-control">
+            <button class="stepper-btn" data-dec="resKitchens" type="button" aria-label="Fewer kitchens">−</button>
+            <input id="resKitchens" type="number" value="1" min="1" max="10" inputmode="numeric">
+            <button class="stepper-btn" data-inc="resKitchens" type="button" aria-label="More kitchens">+</button>
+          </div>
+        </div>
+        <div class="stepper-row">
+          <span class="stepper-label">Extra living areas<small class="stepper-hint">+$45 each</small></span>
+          <div class="stepper-control">
+            <button class="stepper-btn" data-dec="livingAreas" type="button" aria-label="Fewer living areas">−</button>
+            <input id="livingAreas" type="number" value="0" min="0" max="20" inputmode="numeric">
+            <button class="stepper-btn" data-inc="livingAreas" type="button" aria-label="More living areas">+</button>
+          </div>
+        </div>
+        <!-- Carpet steam cleaning is no longer an end-of-lease add-on —
+             it is its own service (the "Carpet steam clean" tab), so it is
+             priced in one place only. -->
+
+        <div style="margin-top:24px">
+          <button id="multiStoreyBtn" class="feature-toggle-btn" type="button" aria-pressed="false">
+            <span>Multi-storey property</span><span class="check-price">+$50</span>
+          </button>
+          <button id="addonOven" class="feature-toggle-btn" type="button" aria-pressed="false">
+            <span>Heavy-duty oven clean <small class="stepper-hint">standard oven clean already included</small></span><span class="check-price">+$110</span>
+          </button>
+        </div>
+      </div>
+
+      <div id="panelCommercial" class="service-panel">
+        <div class="field">
+          <label class="field-label" for="sqm">Total floor area</label>
+          <div class="range-row">
+            <input id="sqm" type="range" min="20" max="2000" value="100" step="10">
+            <span class="range-value"><span id="sqmValue">100</span> m²</span>
+          </div>
+          <p class="field-hint">Larger sites are charged at a lower rate per m².</p>
+        </div>
+
+        <div class="field">
+          <label class="field-label">Type of clean</label>
+          <div class="yesno-group">
+            <button id="cleanStandardBtn" class="yesno-btn" type="button" aria-pressed="true">Standard maintenance</button>
+            <button id="cleanDeepBtn" class="yesno-btn" type="button" aria-pressed="false">Deep / first-time</button>
+          </div>
+          <p class="field-hint">A first-time or post-build clean takes roughly twice as long.</p>
+        </div>
+
+        <div class="stepper-row">
+          <span class="stepper-label">Workstations / desks<small class="stepper-hint">+$2.50 each</small></span>
+          <div class="stepper-control">
+            <button class="stepper-btn" data-dec="desks" type="button" aria-label="Fewer desks">−</button>
+            <input id="desks" type="number" value="0" min="0" max="500" inputmode="numeric">
+            <button class="stepper-btn" data-inc="desks" type="button" aria-label="More desks">+</button>
+          </div>
+        </div>
+        <div class="stepper-row">
+          <span class="stepper-label">Toilets / cubicles<small class="stepper-hint">+$20 each</small></span>
+          <div class="stepper-control">
+            <button class="stepper-btn" data-dec="toilets" type="button" aria-label="Fewer toilets">−</button>
+            <input id="toilets" type="number" value="0" min="0" max="99" inputmode="numeric">
+            <button class="stepper-btn" data-inc="toilets" type="button" aria-label="More toilets">+</button>
+          </div>
+        </div>
+        <div class="stepper-row">
+          <span class="stepper-label">Kitchens / breakrooms<small class="stepper-hint">+$35 each</small></span>
+          <div class="stepper-control">
+            <button class="stepper-btn" data-dec="kitchens" type="button" aria-label="Fewer kitchens">−</button>
+            <input id="kitchens" type="number" value="0" min="0" max="20" inputmode="numeric">
+            <button class="stepper-btn" data-inc="kitchens" type="button" aria-label="More kitchens">+</button>
+          </div>
+        </div>
+        <div class="stepper-row" id="commercialCarpetRoomsRow">
+          <span class="stepper-label">Carpet for steam<small class="stepper-hint">+$45 per room</small></span>
+          <div class="stepper-control">
+            <button class="stepper-btn" data-dec="commercialCarpetRooms" type="button" aria-label="Fewer carpet rooms">−</button>
+            <input id="commercialCarpetRooms" type="number" value="0" min="0" max="99" inputmode="numeric">
+            <button class="stepper-btn" data-inc="commercialCarpetRooms" type="button" aria-label="More carpet rooms">+</button>
+          </div>
+        </div>
+        <div class="stepper-row">
+          <span class="stepper-label">Bins to empty<small class="stepper-hint">+$3 each</small></span>
+          <div class="stepper-control">
+            <button class="stepper-btn" data-dec="bins" type="button" aria-label="Fewer bins">−</button>
+            <input id="bins" type="number" value="0" min="0" max="99" inputmode="numeric">
+            <button class="stepper-btn" data-inc="bins" type="button" aria-label="More bins">+</button>
+          </div>
+        </div>
+
+        <div class="field" style="margin-top:24px">
+          <label class="field-label" for="frequency">How often?</label>
+          <select id="frequency" class="input">
+            <option value="oneoff">One-off clean</option>
+            <option value="fortnightly">Fortnightly — 5% off</option>
+            <option value="weekly">Weekly — 10% off</option>
+            <option value="daily">Daily — 15% off</option>
+          </select>
+        </div>
+
+        <div style="margin-top:8px">
+          <label class="field-label">Optional extras</label>
+          <button id="addMultiStoreyBtn" class="feature-toggle-btn" type="button" aria-pressed="false">
+            <span>Multi-storey access (stairs, no lift)</span><span class="check-price">+$50</span>
+          </button>
+          <label class="check-row" for="addHighDusting">
+            <input id="addHighDusting" type="checkbox"><span>High dusting — vents, fans, light fittings</span><span class="check-price">+$80</span>
+          </label>
+          <label class="check-row" for="addGlass">
+            <input id="addGlass" type="checkbox"><span>Internal glass &amp; partition polishing</span><span class="check-price">+$75</span>
+          </label>
+          <label class="check-row" for="addFridge">
+            <input id="addFridge" type="checkbox"><span>Fridge interior deep clean</span><span class="check-price">+$45</span>
+          </label>
+          <label class="check-row" for="addDishwasher">
+            <input id="addDishwasher" type="checkbox"><span>Dishwasher deep clean</span><span class="check-price">+$35</span>
+          </label>
+          <label class="check-row" for="addMicrowave">
+            <input id="addMicrowave" type="checkbox"><span>Microwave deep clean &amp; descale</span><span class="check-price">+$25</span>
+          </label>
+          <label class="check-row" for="hasKitchen" hidden>
+            <input id="hasKitchen" type="checkbox"><span>Kitchen (legacy)</span>
+          </label>
+        </div>
+
+        <div class="exclusions-panel" style="margin-top:20px">
+          <h4>Every office clean includes</h4>
+          <ul class="excl-list">
+            <li><span class="tick">✓</span> Bins emptied and liners replaced</li>
+            <li><span class="tick">✓</span> High-touch points disinfected — handles, switches, lift buttons</li>
+            <li><span class="tick">✓</span> Desks and sills wiped, floors vacuumed and mopped</li>
+            <li><span class="tick">✓</span> Toilets, basins, taps and mirrors sanitised; consumables refilled</li>
+            <li><span class="tick">✓</span> Kitchen benches, tables and appliance exteriors wiped; sink scrubbed</li>
+          </ul>
+        </div>
+      </div>
+
+      <div id="panelSteam" class="service-panel">
+        <div class="field">
+          <label class="field-label">What's the property?</label>
+          <div class="yesno-group">
+            <button id="steamForLeaseBtn" class="yesno-btn" type="button" aria-pressed="true">Home / end of lease</button>
+            <button id="steamForOfficeBtn" class="yesno-btn" type="button" aria-pressed="false">Office / commercial</button>
+          </div>
+          <p class="field-hint">Same room rate either way — it tells the crew what kind of site they're attending, and sets which extras are on offer below.</p>
+        </div>
+
+        <div class="included-row">
+          <span class="included-row__label">
+            Carpet steam clean
+            <small>Covers the call-out and your first carpeted room</small>
+          </span>
+          <span class="included-row__price">$150</span>
+        </div>
+
+        <div class="stepper-row">
+          <span class="stepper-label">Additional rooms<small class="stepper-hint">+$45 each, beyond the room included above</small></span>
+          <div class="stepper-control">
+            <button class="stepper-btn" data-dec="steamExtraRooms" type="button" aria-label="Fewer additional rooms">−</button>
+            <input id="steamExtraRooms" type="number" value="0" min="0" max="99" inputmode="numeric">
+            <button class="stepper-btn" data-inc="steamExtraRooms" type="button" aria-label="More additional rooms">+</button>
+          </div>
+        </div>
+        <p class="field-hint" id="steamRoomsTotal"></p>
+
+        <!-- Residential pathway extras. Rates match the end-of-lease
+             service exactly (js/pricing.js steam.addons), so a kitchen
+             costs the same whichever way it is booked. -->
+        <div id="steamLeaseAddons">
+          <h3 class="substep-title">Add more to the visit</h3>
+          <p class="step-subtitle">Optional. Leave at zero if you only need the carpets done.</p>
+
+          <div class="stepper-row">
+            <span class="stepper-label">Kitchens<small class="stepper-hint">+$70 each</small></span>
+            <div class="stepper-control">
+              <button class="stepper-btn" data-dec="steamKitchens" type="button" aria-label="Fewer kitchens">−</button>
+              <input id="steamKitchens" type="number" value="0" min="0" max="20" inputmode="numeric">
+              <button class="stepper-btn" data-inc="steamKitchens" type="button" aria-label="More kitchens">+</button>
+            </div>
+          </div>
+          <div class="stepper-row">
+            <span class="stepper-label">Washrooms<small class="stepper-hint">+$60 each</small></span>
+            <div class="stepper-control">
+              <button class="stepper-btn" data-dec="steamWashrooms" type="button" aria-label="Fewer washrooms">−</button>
+              <input id="steamWashrooms" type="number" value="0" min="0" max="20" inputmode="numeric">
+              <button class="stepper-btn" data-inc="steamWashrooms" type="button" aria-label="More washrooms">+</button>
+            </div>
+          </div>
+          <div class="stepper-row">
+            <span class="stepper-label">Living areas<small class="stepper-hint">+$45 each</small></span>
+            <div class="stepper-control">
+              <button class="stepper-btn" data-dec="steamLivingAreas" type="button" aria-label="Fewer living areas">−</button>
+              <input id="steamLivingAreas" type="number" value="0" min="0" max="20" inputmode="numeric">
+              <button class="stepper-btn" data-inc="steamLivingAreas" type="button" aria-label="More living areas">+</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Office pathway: opt in to a full office clean at the same
+             visit. #panelCommercial is MOVED into the mount below rather
+             than duplicated — duplicating it would mean two elements
+             sharing every id, and every getElementById in app.js would
+             silently read the wrong one. -->
+        <div class="combo-toggle-wrap" id="steamComboWrap" hidden>
+          <button id="steamAddFullClean" class="feature-toggle-btn" type="button" aria-pressed="false" aria-expanded="false" aria-controls="steamCombinedMount">
+            <span id="steamAddFullCleanLabel">Add a full office clean too</span>
+            <span class="check-price">Add</span>
+          </button>
+          <p class="field-hint" id="steamComboHint">Same visit, one booking. Priced on top of the steam clean — carpet is only ever charged once.</p>
+        </div>
+
+        <div id="steamCombinedMount" class="combo-mount" hidden></div>
+
+        <div class="exclusions-panel" style="margin-top:20px">
+          <h4>Every steam clean includes</h4>
+          <ul class="excl-list">
+            <li><span class="tick">✓</span> Pre-vacuum and spot pre-treatment of visible marks</li>
+            <li><span class="tick">✓</span> Hot-water extraction across the full carpeted area of each room</li>
+            <li><span class="tick">✓</span> Edges and corners done by hand, not just the open floor</li>
+            <li><span class="tick">✓</span> Deodoriser and a grooming pass to lift the pile</li>
+            <li><span class="x">✕</span> Chemical or deep pet-urine treatment, and mould remediation</li>
+          </ul>
+          <p class="field-hint" style="margin-top:12px">Carpets are damp for 2–4 hours after we finish. Keep the room ventilated and off-limits until dry.</p>
+        </div>
+      </div>
+
+      <div class="notice notice-info" id="jobDurationNotice" style="margin-top:24px"></div>
+
+      <div class="wizard-nav">
+        <span></span>
+        <button class="btn btn-primary" data-next>Continue</button>
+      </div>
+    </section>
+
+    <!-- STEP 2 -->
+    <section class="step" data-step="2">
+      <div class="step-illustration reveal">
+        <img src="https://images.pexels.com/photos/8293635/pexels-photo-8293635.jpeg?auto=compress&cs=tinysrgb&w=900"
+             alt="A person reviewing a printed home inspection checklist" loading="lazy">
+      </div>
+      <h2 class="step-title">One straight question.</h2>
+      <p class="step-subtitle">Some jobs need remediation gear we don't carry. We tell you now, not on the day.</p>
+
+      <div class="field">
+        <label class="field-label">Does the property have heavy mould, biological waste, or intense odours?</label>
+        <div class="yesno-group">
+          <button id="heavyNoBtn" class="yesno-btn" type="button" aria-pressed="true">No, it's standard</button>
+          <button id="heavyYesBtn" class="yesno-btn" type="button" aria-pressed="false">Yes, one or more apply</button>
+        </div>
+      </div>
+
+      <div class="exclusions-panel" data-reveal>
+        <h4>What your quote covers</h4>
+        <ul class="excl-list">
+          <li><span class="tick">✓</span> Heavy grease, limescale and general grime — we handle this</li>
+          <li><span class="x">✕</span> Mould remediation and biohazard cleaning</li>
+          <li><span class="x">✕</span> Heavy wall markings needing repainting-level work</li>
+          <li><span class="x">✕</span> Chemical or deep pet-urine carpet treatment</li>
+        </ul>
+        <p class="field-hint" style="margin-top:12px">If any excluded item applies, we refer you to a restoration partner. That protects your bond and avoids a failed job.</p>
+      </div>
+
+      <div class="longterm-panel" id="longTermPanel">
+        <div class="longterm-panel__body">
+          <h4>Cleaning us regularly? You're on the wrong price.</h4>
+          <p>
+            Weekly, fortnightly or ongoing contract work — end of lease, office
+            or carpet steam — is quoted on a special long-term rate, not the
+            one-off price on this page. Talk to us and we'll put a figure
+            against your actual schedule.
+          </p>
+        </div>
+        <button id="longTermContactBtn" class="btn btn-mint" type="button">
+          Get long-term rates →
+        </button>
+        <p class="field-hint longterm-panel__hint">
+          Entirely optional. This takes you to our contact options — your
+          details from step 1 come with you, so there's nothing to type
+          again.
+        </p>
+      </div>
+
+      <div class="field" style="margin-top:24px">
+        <label class="check-row" for="agreeTerms">
+          <input id="agreeTerms" type="checkbox">
+          <span>I've read and accept the <a href="terms.html" target="_blank" rel="noopener">Terms of Service</a>, including my rights under the Australian Consumer Law and the 72-hour bond-back rectification guarantee</span>
+        </label>
+        <span id="agreeTermsError" class="field-error" role="alert"></span>
+      </div>
+
+      <div class="wizard-nav">
+        <button class="btn btn-ghost" data-prev>Back</button>
+        <button id="conditionsNextBtn" class="btn btn-primary" data-next>Continue</button>
+      </div>
+    </section>
+
+    <!-- STEP 3 -->
+    <section class="step" data-step="3">
+      <div class="step-illustration reveal">
+        <img src="https://images.pexels.com/photos/28100043/pexels-photo-28100043.jpeg?auto=compress&cs=tinysrgb&w=900"
+             alt="Hands photographing a bright living room with a smartphone camera" loading="lazy">
+      </div>
+      <h2 class="step-title">Point your camera. Let the AI settle the price.</h2>
+      <p class="step-subtitle">Optional, but recommended. Our AI reviews each photo (room, kitchen, bathroom, stairs) and only adjusts your price if it actually finds extra work — a clean property stays at the standard rate.</p>
+
+      <div id="dropzone" class="dropzone" tabindex="0" role="button" aria-label="Upload photos">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 16V4M12 4l-4 4M12 4l4 4"/><path d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2"/></svg>
+        <p><span class="dz-action">Click to upload</span> or drag photos here</p>
+        <p class="field-hint" style="margin-top:6px">JPG or PNG, up to 10MB each</p>
+        <input id="fileInput" type="file" accept="image/*" multiple hidden>
+      </div>
+
+      <button id="openCameraBtn" class="btn btn-ghost" type="button" style="margin-top:16px">Take a photo now</button>
+
+      <div id="cameraPanel" class="camera-panel" hidden>
+        <video id="cameraVideo" class="camera-video" autoplay playsinline muted></video>
+        <canvas id="cameraCanvas" hidden></canvas>
+        <div class="camera-controls">
+          <button id="captureBtn" class="btn btn-mint" type="button">Capture</button>
+          <button id="closeCameraBtn" class="btn btn-ghost" type="button">Cancel</button>
+        </div>
+        <p class="field-error" id="cameraError" role="alert"></p>
+      </div>
+
+      <div id="fileList" class="file-list"></div>
+      <p class="notice notice-info" id="aiPhotoStatus" hidden></p>
+      <p class="field-hint">Remove any photo before you pay.</p>
+
+      <div class="wizard-nav">
+        <button class="btn btn-ghost" data-prev>Back</button>
+        <button class="btn btn-primary" data-next>Continue to order review</button>
+      </div>
+    </section>
+
+    <!-- STEP 4 -->
+    <section class="step" data-step="4">
+      <div class="step-illustration reveal">
+        <img src="https://images.pexels.com/photos/7688191/pexels-photo-7688191.jpeg?auto=compress&cs=tinysrgb&w=900"
+             alt="Two people closely checking an itemised invoice line by line" loading="lazy">
+      </div>
+      <h2 class="step-title">Check every line. Then it's locked in.</h2>
+      <p class="step-subtitle">Check everything below before you pay — this is exactly what gets charged.</p>
+
+      <div class="notice notice-warn" id="reviewDurationNotice" hidden></div>
+
+      <div class="invoice-card">
+        <div id="orderReviewSummary" class="order-review-summary"></div>
+        <div id="orderReviewGst" class="gst-breakdown"></div>
+      </div>
+      <p style="margin-top:10px; font-weight:700; font-size:1.05rem; color:var(--teal-700)">You'll get a reply confirming your booking within 24 hours.</p>
+
+      <div class="notice notice-info" style="margin-top:20px">
+        This price reflects the details and photos you provided, with GST
+        added at the standard Australian rate. Management may only revise it
+        if the property's actual condition or size differs materially from
+        what's described here — see our
+        <a href="terms.html" target="_blank" rel="noopener">Terms of Service</a>
+        for how that's handled. Nothing is charged until you confirm on the
+        payment step.
+      </div>
+
+      <div class="wizard-nav">
+        <button class="btn btn-ghost" data-prev>Back</button>
+        <button class="btn btn-primary" data-next>Continue to payment</button>
+      </div>
+    </section>
+
+    <!-- STEP 5 -->
+    <section class="step" data-step="5">
+      <div class="step-illustration reveal">
+        <img src="https://images.pexels.com/photos/6633607/pexels-photo-6633607.jpeg?auto=compress&cs=tinysrgb&w=900"
+             alt="A hand holding a card while entering payment details on a laptop" loading="lazy">
+      </div>
+      <h2 class="step-title">Encrypted and secure. Pay with confidence.</h2>
+      <p class="step-subtitle">Stripe handles your card. This page never sees or stores the number.</p>
+
+      <div class="payment-card">
+        <div id="gstBreakdown" class="gst-breakdown"></div>
+        <div id="lowValueNotice" class="notice notice-warn" hidden>
+          This quote is under $150. A minimum call-out applies to small jobs. We confirm scheduling before locking it in.
+        </div>
+
+        <div class="field">
+          <label class="field-label" for="cardholderName">Name on card</label>
+          <input id="cardholderName" class="input" type="text" placeholder="Jordan Smith">
+        </div>
+
+        <div class="field">
+          <label class="field-label" for="stripe-card-element">Card details</label>
+          <div id="stripe-card-element"><span class="stripe-placeholder" id="stripePlaceholder">Loading secure payment form…</span></div>
+          <span id="stripe-card-errors" role="alert"></span>
+        </div>
+
+        <button id="payBtn" class="btn btn-primary btn-lg btn-block">Confirm booking</button>
+
+        <p class="secure-note">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 7V5a4 4 0 118 0v2" stroke="currentColor" stroke-width="1.5"/><rect x="3" y="7" width="10" height="7" rx="2" stroke="currentColor" stroke-width="1.5"/></svg>
+          Secured by Stripe. We never store card numbers.
+        </p>
+      </div>
+
+      <div class="wizard-nav">
+        <button class="btn btn-ghost" data-prev>Back</button>
+        <span></span>
+      </div>
+    </section>
+
+    <!-- STEP 6 -->
+    <section class="step" data-step="6">
+      <div style="text-align:center;padding:32px 0">
+        <div id="confirmationCheck" class="confirmation-check">
+          <svg viewBox="0 0 52 52" aria-hidden="true">
+            <circle class="check-circle" cx="26" cy="26" r="25"/>
+            <path class="check-mark" d="M14 27l8 8 16-16"/>
+          </svg>
+        </div>
+        <h2>Booked.</h2>
+        <p class="step-subtitle" style="margin:12px auto 24px">Your confirmation SMS is on its way. We verify your time within 24 hours.</p>
+        <div id="confirmationSummary" class="confirmation-summary"></div>
+        <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+          <a href="index.html" class="btn btn-primary">Back to homepage</a>
+          <button id="returnHomeBtn" class="btn btn-ghost">Book another clean</button>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <aside id="priceSidebar" class="price-sidebar">
+    <div class="price-sidebar-header">Your estimate (incl. GST)</div>
+    <div class="price-range">
+      <span id="priceLow" class="price-low">$320</span>
+      <span class="price-sep">–</span>
+      <span id="priceHigh" class="price-high">$376</span>
+    </div>
+    <div class="price-note">Subject to final management verification</div>
+    <div id="priceBreakdown" class="price-breakdown"></div>
+  </aside>
+</div>
+
+<!-- HEAVY-DUTY MODAL -->
+<div id="heavyModal" class="modal-overlay" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="heavyModalTitle">
+    <button id="heavyModalClose" class="modal-close" aria-label="Close">×</button>
+    <h3 id="heavyModalTitle">This one needs a specialist.</h3>
+    <p class="notice notice-warn">We don't take jobs with heavy mould, biological waste, or intense odours.</p>
+    <p>We clean vacate and office jobs to a guaranteed standard. Remediation work needs different equipment and different training. We'll point you to someone who has both.</p>
+    <div class="field">
+      <label class="field-label" for="heavyModalComment">Tell us more <span class="field-hint" style="display:inline">(optional)</span></label>
+      <textarea id="heavyModalComment" class="input" rows="3" placeholder="E.g. mould in the bathroom ceiling, previous flood damage…"></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" id="heavyModalCloseAlt" type="button">Go back and edit</button>
+      <button class="btn btn-primary" id="heavyModalRefer" type="button">Connect me with a partner</button>
+    </div>
+    <button class="link-btn" id="heavyModalHome" type="button" style="display:block;margin:16px auto 0">Return to homepage</button>
+  </div>
+</div>
+
+<!-- MY BOOKING MODAL -->
+<div id="myBookingModal" class="modal-overlay" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="myBookingTitle">
+    <button id="myBookingCloseBtn" class="modal-close" aria-label="Close">×</button>
+    <h3 id="myBookingTitle">Track my booking</h3>
+    <div id="myBookingLookupView">
+      <p>Enter the phone number you booked with.</p>
+      <div class="field">
+        <label class="field-label" for="myBookingPhone">Phone number</label>
+        <input id="myBookingPhone" class="input" type="tel" placeholder="04xx xxx xxx or 03 xxxx xxxx">
+        <span id="myBookingError" class="field-error" role="alert"></span>
+      </div>
+      <button id="myBookingLookupBtn" class="btn btn-mint btn-block" type="button">Check status</button>
+    </div>
+    <div id="myBookingResultsView" hidden>
+      <div id="myBookingList" class="my-booking-results"></div>
+      <button id="myBookingSearchAgainBtn" class="btn btn-ghost btn-block" type="button" style="margin-top:16px">Look up a different number</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://js.stripe.com/v3/"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/config.js"></script>
+<script src="js/supabase-client.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="js/map.js"></script>
+<script src="js/pricing.js"></script>
+<script src="js/webhook.js"></script>
+<script src="js/payment.js"></script>
+<script src="js/motion.js"></script>
+<script src="js/app.js"></script>
+<script src="js/hero-prefill.js"></script>
+<script>
+/* If Stripe hasn't mounted a few seconds after this step is reachable,
+   say so plainly instead of leaving "Loading…" on screen forever. The
+   usual cause is STRIPE_PUBLISHABLE_KEY still being blank in js/config.js. */
+setTimeout(function () {
+  var ph = document.getElementById('stripePlaceholder');
+  if (!ph || !ph.isConnected) return;           // Stripe replaced it — all good
+  if (!CONFIG.STRIPE_PUBLISHABLE_KEY) {
+    ph.textContent = 'Card payment is not switched on yet. Your booking will still be recorded and we will contact you to arrange payment.';
+  } else {
+    ph.textContent = 'The payment form could not load. Please refresh, or contact us and we will take payment directly.';
+  }
+}, 6000);
+</script>
+<script>
+/* Stepper +/- wiring only. The value is a real <input type="number">
+   because app.js reads .value and listens for 'input' — these buttons
+   just drive it and dispatch that same event, so all pricing logic in
+   app.js stays untouched. */
+document.querySelectorAll('[data-inc],[data-dec]').forEach(function (btn) {
+  btn.addEventListener('click', function () {
+    var id = btn.dataset.inc || btn.dataset.dec;
+    var input = document.getElementById(id);
+    if (!input) return;
+    var min = Number(input.min || 0), max = Number(input.max || 99);
+    var next = Number(input.value || 0) + (btn.dataset.inc ? 1 : -1);
+    input.value = Math.max(min, Math.min(max, next));
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+  });
+});
+/* Second close button in the heavy modal mirrors the first. */
+var altClose = document.getElementById('heavyModalCloseAlt');
+if (altClose) altClose.addEventListener('click', function () {
+  document.getElementById('heavyModalClose').click();
+});
+/* Mobile nav (marketing header pattern reused). */
+var mt = document.getElementById('menuToggle'), nl = document.getElementById('navLinks');
+if (mt && nl) mt.addEventListener('click', function () { nl.classList.toggle('is-open'); });
+</script>
+</body>
+</html>
